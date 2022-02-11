@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "D:\\Alertas Moviles\\alertasWA\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-night-v8\\values-night-v8.xml",
+            "outputFile": "D:\\Flutter\\Design thinking\\CodigoNuevo\\alertasWA\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-night-v8\\values-night-v8.xml",
             "map": [
                 {
-                    "source": "D:\\Alertas Moviles\\alertasWA\\android\\app\\src\\main\\res\\values-night\\styles.xml",
+                    "source": "D:\\Flutter\\Design thinking\\CodigoNuevo\\alertasWA\\android\\app\\src\\main\\res\\values-night\\styles.xml",
                     "from": {
                         "startLines": "3,14",
                         "startColumns": "4,4",

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:robots/Pages/ListaAlertasSuscritas.dart';
 
@@ -143,12 +144,12 @@ class LoginPage extends StatelessWidget {
         onWillPop: () => showDialog<bool>(
       context: context,
       builder: (c) => AlertDialog(
-        title: Text('Warning'),
-        content: Text('Do you really want to exit'),
+        title: Text('Alerta'),
+        content: Text('¿Desea salir de la aplicación?'),
         actions: [
           TextButton(
-            child: Text('Yes'),
-            onPressed: () => Navigator.pop(c, true),
+            child: Text('Si'),
+            onPressed: () => SystemChannels.platform.invokeMethod('SystemNavigator.pop')//Navigator.pop(c, true),
           ),
           TextButton(
             child: Text('No'),
