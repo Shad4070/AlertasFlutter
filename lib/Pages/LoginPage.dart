@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:http/http.dart';
+import 'package:robots/API/ConsumosAPIs.dart';
 import 'package:robots/Pages/ListaAlertasSuscritas.dart';
+import 'dart:convert';
 
 
 class LoginPage extends StatelessWidget {
 
   final myEmail = TextEditingController();
   final myPassword = TextEditingController();
+  final jsonData = '';
+
+
 
   Widget createEmailInput() {
     return Padding(
@@ -49,6 +55,8 @@ class LoginPage extends StatelessWidget {
     );
   }
 
+  Future<String> _futurePost;
+
   Widget createButton(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 30),
@@ -74,31 +82,76 @@ class LoginPage extends StatelessWidget {
             );
           }
           else{
-            if (myEmail.text == 'juanes@wasolutions.co' && myPassword.text == '12345'){
-              Navigator.push<void>(
-                context,
-                MaterialPageRoute<void>(
-                    builder: (BuildContext context) => new ListaAlertasSuscritas()
-                ),
-              );
-            }
-            else{
-              return showDialog(
-                context: context,
+            _futurePost = consultarToken(myEmail.text, myPassword.text);
+            print(_futurePost);
+            return showDialog(context: context,
                 builder: (context){
-                  return AlertDialog(
-                    title: const Text('Inicio sesión'),
-                    content: const  Text('Usuario y/o Contraseña Incorrectos.'),
-                    actions: [
-                      TextButton(
-                          onPressed: () => Navigator.pop(context, 'OK'),
-                          child: const Text('OK')
-                      )
-                    ],
-                  );
-                },
-              );
+
+              return Center(
+              child: FutureBuilder(
+                future: _futurePost,
+                builder: (context,snapshot){
+                  print(snapshot.hasData);
+
+                   if(snapshot.hasData){
+                     //print(snapshot.data);
+
+                  //
+                     if (snapshot.data != '{"mensaje":"Usuario no valido"}'){
+
+
+                      final jsonData = jsonDecode(snapshot.data);
+                      //print(jsonData["token"]);
+                      return AlertDialog(
+                        title: const Text('Inicio sesión'),
+                        content: const  Text('Ingreso Exitoso!'),
+                        actions: [
+                          TextButton(
+                              onPressed: () => Navigator.pushReplacement(context,
+                                MaterialPageRoute<void>(
+                                    builder: (BuildContext context) => new ListaAlertasSuscritas()
+                                ),
+                              ),
+
+                              child: const Text('OK')
+                          )
+                        ],
+                      );
+                    }
+                    else {
+                      return AlertDialog(
+                            title: const Text('Inicio sesión'),
+                            content: const  Text('Usuario y/o Contraseña Incorrectos.'),
+                            actions: [
+                              TextButton(
+                                  onPressed: () => Navigator.pop(context, 'OK'),
+                                  child: const Text('OK')
+                              )
+                            ],
+                          );
+                    }
+                  //   else if(snapshot.hasError){
+                  //   return AlertDialog(
+                  //     title: const Text('Inicio sesión'),
+                  //     content: const  Text('Usuario y/o Contraseña Incorrectos.'),
+                  //     actions: [
+                  //       TextButton(
+                  //           onPressed: () => Navigator.pop(context, 'OK'),
+                  //           child: const Text('OK')
+                  //       )
+                  //     ],
+                  //   );
+                  // }
+                }
+                   return Center(child: CircularProgressIndicator(),);
+                }
+
+
+              ),
+
+            );
             }
+            );
           }
 
         },
@@ -108,6 +161,22 @@ class LoginPage extends StatelessWidget {
       ),
     );
   }
+
+  //
+  // FutureBuilder<Post> buildFutureBuilder() {
+  //   return FutureBuilder<Post>(
+  //     future: _futurePost,
+  //     builder: (context, snapshot) {
+  //       if (snapshot.hasData) {
+  //         return Text(snapshot.data.userName);
+  //       } else if (snapshot.hasError) {
+  //         return Text('${snapshot.error}');
+  //       }
+  //
+  //       return const CircularProgressIndicator();
+  //     },
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
